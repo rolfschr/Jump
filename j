@@ -106,6 +106,7 @@ _j () {
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
+    first="${COMP_WORDS[0]}"
 
 	# We want auto completion to either complete aliases _or_ to complete directories
 	# when the alias has already been expanded. So if the $cur is a valid directory,
@@ -117,7 +118,7 @@ _j () {
 ##		COMPREPLY=( `compgen -W "${oopts}" -- ${cur}` )
 #		return 0
 #	fi
-
+	if [[ "$prev" == "$first" ]]; then
 			opts=`_jlist | grep ^$cur` # this greps all if $cur is empty
 			numopts=`echo "${opts}" | wc -l`
 			if [[ "$opts" != "" && "$numopts" -eq 1 ]]; then # exact match, replace alias with actual dir
@@ -138,6 +139,7 @@ _j () {
 				COMPREPLY=()
 				return 0
 			fi
+	fi
 #	if [[ $COMP_CWORD -eq 1 ]]; then # first arg
 #	    if [[ ${cur} == "" ]] ; then
 			# propose all aliases

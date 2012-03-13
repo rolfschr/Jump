@@ -81,8 +81,11 @@ j () {
 				_jerror "Please give at least an alias!"
 				return 1
 			fi
-			jALIAS=$2
-			_jrm $jALIAS
+			shift
+			for jALIAS in "$@"
+			do
+				_jrm $jALIAS
+			done
 		  ;;
 		"")
 			_jlist

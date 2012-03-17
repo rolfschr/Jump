@@ -17,7 +17,7 @@ _jerror () {
 }
 
 _jadd () {
-	jALIAS=$1
+	ALIAS=$1
 	DIRECTORY=$2
 	# check whether dir exists
 	if [ ! -d "${DIRECTORY}" ]; then
@@ -25,20 +25,20 @@ _jadd () {
 		return 1
 	fi
 	# check whether alias already exists
-	if grep -q "^${jALIAS}=" $_jALIASFILE; then
-	    _jerror "The alias ${jALIAS} already exists!"
+	if grep -q "^${ALIAS}=" $_jALIASFILE; then
+	    _jerror "The alias ${ALIAS} already exists!"
 		return 1
 	fi
 	# remove trailing slash
 	DIRECTORY=`echo ${DIRECTORY} | sed -e 's/\/$//'`
 	# add alias to the list
-	echo "${jALIAS}=${DIRECTORY}" >> $_jALIASFILE
+	echo "${ALIAS}=${DIRECTORY}" >> $_jALIASFILE
 }
 
 _jrm () {
-	jALIAS=$1
+	ALIAS=$1
 	# remove alias from list
-	TMP=`grep -v "^${jALIAS}=" ${_jALIASFILE}` && echo "$TMP" > $_jALIASFILE 
+	TMP=`grep -v "^${ALIAS}=" ${_jALIASFILE}` && echo "$TMP" > $_jALIASFILE 
 }
 
 _jlist () {
@@ -48,14 +48,14 @@ _jlist () {
 
 
 _jjump () {
-	_jALIAS=$1
-	if [[ -d "$_jALIAS" ]]; then
-		DIR=$_jALIAS
+	ALIAS=$1
+	if [[ -d "$ALIAS" ]]; then
+		DIR=$ALIAS
 	else
 	# verify alias name
-		DIR=`grep "^${_jALIAS}=" $_jALIASFILE | sed 's/^.*=//'`
+		DIR=`grep "^${ALIAS}=" $_jALIASFILE | sed 's/^.*=//'`
 		if [ "$DIR" == "" ]; then
-			_jerror "${_jALIAS} does not exist!"
+			_jerror "${ALIAS} does not exist!"
 		fi
 	fi
 	# jump
@@ -69,12 +69,12 @@ j () {
 				_jerror "Please give at least an alias!"
 				return 1
 			fi
-			jALIAS=$2
+			ALIAS=$2
 			DIRECTORY=$3
 			if [ "$DIRECTORY" == "" ]; then
 				DIRECTORY=`pwd`
 			fi
-			_jadd $jALIAS $DIRECTORY
+			_jadd $ALIAS $DIRECTORY
 		  ;;
 		"rm")
 			if [ "$2" == "" ]; then
@@ -82,9 +82,9 @@ j () {
 				return 1
 			fi
 			shift
-			for jALIAS in "$@"
+			for ALIAS in "$@"
 			do
-				_jrm $jALIAS
+				_jrm $ALIAS
 			done
 		  ;;
 		"")
@@ -95,8 +95,8 @@ j () {
 		  ;;
 		*)
 			# jump
-			jALIAS=$1
-			_jjump $jALIAS
+			ALIAS=$1
+			_jjump $ALIAS
 		  ;;
 	esac
 }

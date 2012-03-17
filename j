@@ -10,7 +10,7 @@ shopt -s extglob
 # j add h # add current dir with alias h
 
 # alias file format
-# alias ${ALIASPREFIX}<alias>='cd <directory> && pwd'
+#$ALIAS=$DIR
 
 _jerror () {
     echo "${1}" >&2
@@ -38,7 +38,7 @@ _jadd () {
 _jrm () {
 	ALIAS=$1
 	# remove alias from list
-	TMP=`grep -v "^${ALIAS}=" ${_jALIASFILE}` && echo "$TMP" > $_jALIASFILE 
+	TMP=`grep -v "^${ALIAS}=" ${_jALIASFILE}` && echo "$TMP" > $_jALIASFILE
 }
 
 _jlist () {
@@ -52,7 +52,7 @@ _jjump () {
 	if [[ -d "$ALIAS" ]]; then
 		DIR=$ALIAS
 	else
-	# verify alias name
+		# verify alias name
 		DIR=`grep "^${ALIAS}=" $_jALIASFILE | sed 's/^.*=//'`
 		if [ "$DIR" == "" ]; then
 			_jerror "${ALIAS} does not exist!"
@@ -108,16 +108,6 @@ _j () {
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     first="${COMP_WORDS[0]}"
 
-	# We want auto completion to either complete aliases _or_ to complete directories
-	# when the alias has already been expanded. So if the $cur is a valid directory,
-	# behave like a normal cd
-#	if [[ -d "${cur}" ]]; then
-#		COMPREPLY=( `compgen -d -- ${cur}` )
-#		echo $COMPREPLY
-##		oopts=`ls -d ${cur}*`
-##		COMPREPLY=( `compgen -W "${oopts}" -- ${cur}` )
-#		return 0
-#	fi
 	if [[ "$prev" == "$first" ]]; then
 			opts=`_jlist | grep ^$cur` # this greps all if $cur is empty
 			numopts=`echo "${opts}" | wc -l`
@@ -140,64 +130,6 @@ _j () {
 				return 0
 			fi
 	fi
-#	if [[ $COMP_CWORD -eq 1 ]]; then # first arg
-#	    if [[ ${cur} == "" ]] ; then
-			# propose all aliases
-#		else
-			# propose matching aliases
-#			echo $cur
-#			opts=`_jlist | grep ^$cur`
-#			COMPREPLY=( `compgen -W "${opts}" -- ${cur}` )
-#	        return 0
-#			if [[ `echo "${opts}" | wc -l` -eq 1 ]]; then # repl
-	        #COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
-#			echo $opts
-			#opts=`echo $opts | sed -e "s/^.*=//"`
-#			echo $opts
-#			comps="$opts"
-#			read k<<EOF
-#			$opts
-#EOF
-#			COMPREPLY=("${k}")
-#			while read i
-#        	do
-#        	    COMPREPLY=("${COMPREPLY[@]}" "${i}")
-#        	done <<EOF
-#        	$comps
-#EOF
-	    #fi
-#	fi
 }
 
-__j () {
-        local cur
-        cur=${COMP_WORDS[*]:1}
-		echo $cur
-        comps=$(autojump --bash --completion $cur)
-		comps="uiae "
-		echo $COMPREPLY
-        while read i
-        do
-            COMPREPLY=("${COMPREPLY[@]}" "${i}")
-        done <<EOF
-        $comps
-EOF
-}
-#~$ _jlist | sed -e "s/ =.*$//" | paste -sd " "
-
-_k () {
-    COMPREPLY=("uiae uiae uiae uiae ")
-    COMPREPLY=()
-}
-
-alias c='cd'
-complete -o dirnames -F _k c
 complete -o nospace -o dirnames -F _j j
-complete -o dirnames uuu
-# MAIN
-
-#if [ $# -eq 1 ]; then
-#	jump
-#else
-#fi
-

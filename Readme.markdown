@@ -9,6 +9,15 @@ Please refer also to the following projects:
 - [Apparix](http://www.micans.org/apparix/)
 - [Gnome Do](http://do.davebsd.com/)
 
+I needed a tool where my basic workflow would be the following:
+
+- type in the alias for an often used directory.
+- hit [TAB] to be able to browse subdirs
+- (enter subdir name)
+- press [ENTER] in order to cd to the chosen location
+
+The tools I found on the web (in a couple of minutes, I have to admit) dit auto completion only on the list of aliases but not on the actual file system (where I find the subdirs)
+
 ## Usage
 
 	j add d ~/Documents	# add ~/Documents with alias d
@@ -20,6 +29,7 @@ Please refer also to the following projects:
 	j d[TAB]			# show all alias beginning with d,
 	  					# or, if unique match, replace d with real path
 	j /path/to/r[TAB]	# normal bash autocomplete
+	j /path/to/d[ENTER]	# cd to /path/to/d
 
 ## Licence
 

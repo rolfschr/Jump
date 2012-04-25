@@ -2,12 +2,16 @@ _jALIASFILE=~/.j_alias
 shopt -s extglob
 
 ################################################################################
-
-# j add d ~/Documents # add ~/Documents with alias d
-# j d # jump to directory alias'd d
-# j list # list aliases
-# j rm d # remove alias for d
-# j add h # add current dir with alias h
+# USAGE
+# j add d ~/Documents	# add ~/Documents with alias d
+# j d					# jump to directory alias'd d
+# j ls					# list aliases
+# j rm d				# remove alias for d
+# j add h				# add current dir with alias h
+# j [TAB]				# show all alias as in 'j ls'
+# j d[TAB]				# show all alias beginning with d,
+						# or, if unique match, replace d with real path
+# j /path/to/r[TAB]		# normal bash autocomplete
 
 # alias file format
 #$ALIAS=$DIR
@@ -72,7 +76,7 @@ j () {
 			ALIAS=$2
 			DIRECTORY=$3
 			if [ "$DIRECTORY" == "" ]; then
-				DIRECTORY=`pwd`
+				DIRECTORY=`pwd` # if dir is not specified, take current location
 			fi
 			_jadd $ALIAS $DIRECTORY
 		  ;;
@@ -102,11 +106,11 @@ j () {
 }
 
 _j () {
-#    local cur prev opts tmp
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    first="${COMP_WORDS[0]}"
+	#local cur prev opts tmp
+	COMPREPLY=()
+	cur="${COMP_WORDS[COMP_CWORD]}"
+	prev="${COMP_WORDS[COMP_CWORD-1]}"
+	first="${COMP_WORDS[0]}"
 
 	if [[ "$prev" == "$first" ]]; then
 			opts=`_jlist | grep ^$cur` # this greps all if $cur is empty
@@ -121,11 +125,9 @@ _j () {
 				COMPREPLY=("${tmp}/") # add '/' to have direct auto-completion support on next [TAB]
 				return 0
 			elif [[ "$numopts" -gt 1 ]]; then # when there are several choices, print them
-#				echo "2"
 				COMPREPLY=( `compgen -W "${opts}" -- ${cur}` )
 				return 0
 			else # no corresponding alias, complete withe dirnames
-#				echo "uieuiae"
 				COMPREPLY=()
 				return 0
 			fi

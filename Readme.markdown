@@ -16,7 +16,7 @@ I needed a tool where my basic workflow would be the following:
 - (enter subdir name)
 - press [ENTER] in order to cd to the chosen location
 
-The tools I found on the web (in a couple of minutes, I have to admit) dit auto completion only on the list of aliases but not on the actual file system (where I find the subdirs)
+The tools I found on the web (in a couple of minutes, I have to admit) did auto completion only on the list of aliases but not on the actual file system (where I find the subdirs)
 
 ## Usage
 

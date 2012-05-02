@@ -28,6 +28,10 @@ _jadd () {
 	    _jerror "${DIRECTORY} does not exist!"
 		return 1
 	fi
+	# first use, create file
+	if [[ ! -f $_jALIASFILE ]]; then
+		touch $_jALIASFILE
+	fi
 	# check whether alias already exists
 	if grep -q "^${ALIAS}=" $_jALIASFILE; then
 	    _jerror "The alias ${ALIAS} already exists!"
@@ -47,7 +51,9 @@ _jrm () {
 
 _jlist () {
 	# cat aliases
-	cat $_jALIASFILE #| sed -e "s/=/ = /"
+	if [[ -f $_jALIASFILE ]]; then
+		cat $_jALIASFILE #| sed -e "s/=/ = /"
+	fi
 }
 
 

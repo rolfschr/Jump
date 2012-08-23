@@ -1,3 +1,4 @@
+#!/bin/bash
 _jALIASFILE=~/.j_alias
 shopt -s extglob
 

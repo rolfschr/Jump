@@ -1,4 +1,5 @@
 #!/bin/bash
+
 _jALIASFILE=~/.j_alias
 shopt -s extglob
 
@@ -47,7 +48,9 @@ _jadd () {
 _jrm () {
 	ALIAS=$1
 	# remove alias from list
-	TMP=`grep -v "^${ALIAS}=" ${_jALIASFILE}` && echo "$TMP" > $_jALIASFILE
+	TMP=`grep -v "^${ALIAS}=" ${_jALIASFILE}`
+	rm "${_jALIASFILE}"
+	echo "$TMP" > "${_jALIASFILE}"
 }
 
 _jlist () {
